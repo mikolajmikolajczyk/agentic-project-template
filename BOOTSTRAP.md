@@ -67,9 +67,15 @@ Search the repo for `<TBD` and `<PROJECT_NAME>`. Replace using the answers. File
 
 For each item in Q6, write `wiki/adr/0001-*.md`, `0002-*.md`, ... using the format described in `wiki/adr/README.md`. Number sequentially. If user picked AGPL/MIT/etc. in Q3, write a license ADR too.
 
-### Step 4 — Add LICENSE file
+### Step 4 — Replace LICENSE file
 
-Based on Q3, drop the canonical license text into `LICENSE`. Skip if "decide later".
+**First delete the inherited `LICENSE`** — the template ships MIT for the template itself, NOT for projects bootstrapped from it. Leaving it would silently make every new project MIT against the user's will.
+
+```sh
+rm LICENSE
+```
+
+Then, based on Q3, drop the canonical license text into a fresh `LICENSE`. Skip the recreate step if user picked "decide later" — leave the file deleted.
 
 ### Step 5 — Set up Radicle (only if user confirms)
 
