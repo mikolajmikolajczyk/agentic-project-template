@@ -51,7 +51,7 @@ Search the repo for `<TBD` and `<PROJECT_NAME>`. Replace using the answers. File
 
 - `AGENTS.md` — project name, description, dev loop snippet, code ownership
 - `CLAUDE.md` — project name
-- `README.md` — name + description + minimal "how to get started"
+- `README.md` — **overwrite entirely** (current contents describe the template itself; replace with project README: title from Q1, one-line description, minimal "Getting started" for the chosen stack from Q2, license section from Q3). Don't keep the template's "Contributing via Radicle / RID rad:zVjxxNV4b1xBphQA78dNtTLQKtic" section — that's about the template repo, not your project. Your project gets its own RID after `rad init` in Step 5.
 - `wiki/index.md` — title
 - `wiki/agents/index.md` — title
 - `wiki/user/index.md` — title
