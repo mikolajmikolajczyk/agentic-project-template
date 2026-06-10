@@ -1,0 +1,31 @@
+# Logs
+logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*.sw?
+*~
+
+# Local-only
+*.local
+.envrc.local
+
+# direnv cache (Nix flake users)
+.direnv/
+
+# Skills installed by scripts/skills-bootstrap.sh — symlinks to llm_skills cache.
+# Re-created on demand; not committed.
+.agents/skills/
+.claude/skills/
+
+# --- Stack-specific (filled at bootstrap) ---
+# Add language/build artifacts here: node_modules/, dist/, target/, __pycache__/, etc.
