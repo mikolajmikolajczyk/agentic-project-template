@@ -41,4 +41,4 @@ GitHub Pull Requests are **not** monitored. Open an issue on Radicle or send a p
 
 ## License
 
-<TBD: not yet decided for this template repo>
+MIT — see [`LICENSE`](LICENSE). It's a scaffold with sensible defaults, nothing novel; do whatever you want with it.
