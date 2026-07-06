@@ -21,10 +21,14 @@ What you get out of the box:
 - `.claude/hooks/session-start.sh` — prints branch + last 5 commits + in-progress tasks + to-do snapshot at every session start
 - `.pre-commit-config.yaml` — generic hooks (whitespace, yaml/json checks, markdownlint, shellcheck, gitleaks, GPG UID guard)
 - `scripts/uid-guard.sh` — GPG signing-key UID safety check
+- `init.sh` — one-shot clone initializer (fresh git history, skills linked, hooks installed); self-deletes after running
 
 ## Procedure
 
 ### Step 0 — Link skills
+
+If the user ran `./init.sh` after cloning, this is already done (fresh git history, skills
+linked, pre-commit installed) — verify and move on. Otherwise:
 
 Skills are **vendored** (committed under `.agents/skills/`). This step only symlinks them into
 `.claude/skills/` so Claude Code can auto-trigger them — no network.
@@ -34,7 +38,7 @@ Skills are **vendored** (committed under `.agents/skills/`). This step only syml
 ```
 
 Verify: `ls .agents/skills/backlog/SKILL.md` exists, and `ls -l .claude/skills/backlog` shows a
-symlink into it.
+symlink into it. (Re-running is idempotent either way.)
 
 ### Step 1 — Ask the user these questions (one batch)
 
@@ -57,7 +61,7 @@ Search the repo for `<TBD` and `<PROJECT_NAME>`. Replace using the answers. File
 
 - `AGENTS.md` — project name, description, dev loop snippet, code ownership
 - `CLAUDE.md` — project name
-- `backlog/config.yml` — set `project_name` from Q1 (edit the file directly; `backlog config` opens the interactive flow)
+- `backlog/config.yml` — set `project_name` from Q1 (`backlog config set projectName "<name>"` — CLI keys are camelCase — or edit the file)
 - `README.md` — **overwrite entirely** (current contents describe the template itself; replace with project README: title from Q1, one-line description, minimal "Getting started" for the chosen stack from Q2, license section from Q3). Drop the template's "Contributing" section — that's about the template repo, not your project.
 - `backlog/docs/readme.md` — title / intro
 - `backlog/docs/user/index.md` — title
@@ -90,7 +94,7 @@ The `backlog/` scaffold (config, folders) already ships committed — no interac
 needed. Set the project name and create the first task from Q5:
 
 ```sh
-backlog config set project_name "<project-name>"      # or edit backlog/config.yml
+backlog config set projectName "<project-name>"       # or edit backlog/config.yml
 backlog task create "<goal from Q5>" --priority high
 ```
 

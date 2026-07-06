@@ -59,8 +59,8 @@ backlog task <id> --plain
 
 `create` and `edit` share most flags: `-d/--description`, `--ac <criterion>` (repeatable),
 `-l/--labels`, `--priority`, `-s/--status`, `-a/--assignee`, `--plan`, `--notes`,
-`-p <parent-id>` (parent), `--dep <ids>` (dependencies), `--draft`, `--dod`. `edit` adds
-`--check-ac <n>` / `--uncheck-ac <n>` and `--comment`.
+`--dep <ids>` (dependencies), `--dod`. `create`-only: `-p <parent-id>` (parent), `--draft`.
+`edit` adds `--check-ac <n>` / `--uncheck-ac <n>` and `--comment`.
 
 ## Board & browser
 

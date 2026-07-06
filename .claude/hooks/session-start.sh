@@ -14,27 +14,24 @@ print_section() {
 print_section "branch + last 5 commits"
 git log --format="%h %s" -5 2>/dev/null || echo "(no git)"
 
-print_section "in-progress tasks (backlog)"
-if command -v backlog >/dev/null 2>&1; then
-  out=$(backlog task list -s "In Progress" --plain 2>/dev/null | head -10)
-  if [ -n "$out" ]; then
-    echo "$out"
-  else
-    echo "(none — nothing In Progress)"
-  fi
-else
-  echo "(backlog not on PATH — run 'nix develop' or install Backlog.md)"
-fi
-
-print_section "to-do snapshot"
-if command -v backlog >/dev/null 2>&1; then
+print_tasks() {
   # --plain is the non-interactive view; never launch the TUI board from a hook.
-  out=$(backlog task list -s "To Do" --plain 2>/dev/null | head -10)
+  out=$(backlog task list -s "$1" --plain 2>/dev/null | head -10)
   if [ -n "$out" ]; then
     echo "$out"
   else
-    echo "(none — nothing in To Do)"
+    echo "(none — nothing in $1)"
   fi
+}
+
+if command -v backlog >/dev/null 2>&1; then
+  print_section "in-progress tasks (backlog)"
+  print_tasks "In Progress"
+  print_section "to-do snapshot"
+  print_tasks "To Do"
+else
+  print_section "tasks (backlog)"
+  echo "(backlog not on PATH — run 'nix develop' or install Backlog.md)"
 fi
 
 print_section "load order reminder"

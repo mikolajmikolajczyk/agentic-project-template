@@ -28,11 +28,12 @@ with:
 ```sh
 git clone git@github.com:mikolajmikolajczyk/agentic-project-template.git my-project
 cd my-project
-rm -rf .git && git init && git branch -m main
+./init.sh    # wipes template history, fresh repo on main, links skills,
+             # installs pre-commit + direnv, then self-deletes
 
 # Then open the project in Claude Code (or another agent) and let it read BOOTSTRAP.md.
-# The agent will run ./scripts/skills-bootstrap.sh, ask you ~10 questions,
-# fill placeholders, seed decisions, and self-delete BOOTSTRAP.md.
+# The agent asks you ~10 questions, fills placeholders, seeds decisions,
+# and self-deletes BOOTSTRAP.md.
 ```
 
 ## Contributing

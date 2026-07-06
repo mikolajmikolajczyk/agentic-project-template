@@ -15,7 +15,7 @@ fi
 
 mkdir -p .claude/skills
 
-# Prune stale links: remove any .claude/skills/<name> whose vendored source is gone.
+# Only symlinks are pruned — a real file/dir here is user-made, leave it alone.
 for link in .claude/skills/*; do
   [[ -L "$link" ]] || continue
   name=$(basename "$link")
