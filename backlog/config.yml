@@ -1,0 +1,14 @@
+project_name: "<PROJECT_NAME>"
+default_status: "To Do"
+statuses:
+  - "To Do"
+  - "In Progress"
+  - "Done"
+labels: []
+milestones: []
+date_format: yyyy-mm-dd hh:mm
+task_prefix: task
+auto_commit: false
+default_port: 6420
+# Fill at bootstrap once the stack is known (e.g. "tests pass", "lint clean").
+definition_of_done: []

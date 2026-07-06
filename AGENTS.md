@@ -6,7 +6,7 @@ Repo-specific notes for coding agents (Claude Code, Cursor, Aider, Copilot, …)
 
 ## ⚠️ First-time setup
 
-If `BOOTSTRAP.md` still exists in repo root, this project hasn't been bootstrapped yet. **Read `BOOTSTRAP.md` first** and follow its instructions before doing anything else. It will walk the user through ~8 questions, fill the `<TBD>` placeholders in this file and across `wiki/`, then delete itself.
+If `BOOTSTRAP.md` still exists in repo root, this project hasn't been bootstrapped yet. **Read `BOOTSTRAP.md` first** and follow its instructions before doing anything else. It will walk the user through ~10 questions, fill the `<TBD>` placeholders in this file and across `backlog/`, then delete itself.
 
 ## What this is
 
@@ -16,22 +16,19 @@ If `BOOTSTRAP.md` still exists in repo root, this project hasn't been bootstrapp
 
 | Need | Path | When to load |
 |------|------|--------------|
-| **Source of truth for roadmap, milestones, backlog** | Radicle issues — `rad issue list --all` | Always. **Don't read roadmaps from markdown.** |
-| Current repo shape, data flow, file map | [`wiki/agents/architecture.md`](wiki/agents/architecture.md) | When making structural changes or unfamiliar with module layout |
-| Coding conventions, file naming, commit style, comment policy | [`wiki/agents/conventions.md`](wiki/agents/conventions.md) | Before writing or modifying code |
-| Feature status (what works, what's in flight, what's broken) | [`wiki/agents/status.md`](wiki/agents/status.md) | When user asks "does X work?" or you're picking up work |
-| Common dev commands (build, test, run, typecheck, lint) | [`wiki/agents/commands.md`](wiki/agents/commands.md) | When running build/test/dev loops |
-| Tooling (devShell, direnv, pre-commit, static analysis) | [`wiki/agents/dev-setup.md`](wiki/agents/dev-setup.md) | When fixing tooling, adding hooks, or onboarding |
-| Working on issues (state columns, branch naming, patch flow, session handoff) | [`wiki/agents/working-on-issues.md`](wiki/agents/working-on-issues.md) | Before picking up a Radicle issue |
-| Where to capture decisions (ADR vs decision log vs comment) | [`wiki/adr/README.md`](wiki/adr/README.md) | When making a non-trivial decision |
-| Project glossary / domain terminology | [`wiki/agents/glossary.md`](wiki/agents/glossary.md) | When you hit an unfamiliar term |
-| Things deliberately deferred — do NOT implement unprompted | [`wiki/agents/deferred.md`](wiki/agents/deferred.md) | Before adding features that "seem missing" |
-| Architecture Decision Records | [`wiki/adr/`](wiki/adr/) | When touching subsystems an ADR covers |
-| Cross-cutting decisions (not big enough for ADR) | [`wiki/decisions/`](wiki/decisions/) | Before reversing a prior call |
-| Radicle skill (`rad` CLI usage) | [`.agents/skills/radicle/SKILL.md`](.agents/skills/radicle/SKILL.md) | Auto-loaded by radicle skill trigger; also when driving `rad` manually |
-| Radboard skill (label conventions for kanban) | [`.agents/skills/radboard/SKILL.md`](.agents/skills/radboard/SKILL.md) | Before adding labels to issues/patches |
+| **Source of truth for roadmap, tasks, backlog** | Backlog.md — `backlog task list --plain` | Always. **Don't read roadmaps from markdown.** |
+| Current repo shape, data flow, file map | [`backlog/docs/architecture.md`](backlog/docs/architecture.md) | When making structural changes or unfamiliar with module layout |
+| Coding conventions, file naming, commit style, comment policy | [`backlog/docs/conventions.md`](backlog/docs/conventions.md) | Before writing or modifying code |
+| Feature status (what works, what's in flight, what's broken) | [`backlog/docs/status.md`](backlog/docs/status.md) | When user asks "does X work?" or you're picking up work |
+| Common dev commands (build, test, run, typecheck, lint) | [`backlog/docs/commands.md`](backlog/docs/commands.md) | When running build/test/dev loops |
+| Tooling (devShell, direnv, pre-commit, static analysis) | [`backlog/docs/dev-setup.md`](backlog/docs/dev-setup.md) | When fixing tooling, adding hooks, or onboarding |
+| Working on tasks (statuses, branch naming, session handoff) | [`backlog/docs/working-on-tasks.md`](backlog/docs/working-on-tasks.md) | Before picking up a task |
+| Where to capture decisions (`backlog decision` vs task note) | [`backlog/docs/decisions.md`](backlog/docs/decisions.md) + `backlog decision list` | When making a non-trivial decision |
+| Project glossary / domain terminology | [`backlog/docs/glossary.md`](backlog/docs/glossary.md) | When you hit an unfamiliar term |
+| Things deliberately deferred — do NOT implement unprompted | [`backlog/docs/deferred.md`](backlog/docs/deferred.md) | Before adding features that "seem missing" |
+| Backlog skill (`backlog` CLI + task/doc/decision workflow) | [`.agents/skills/backlog/SKILL.md`](.agents/skills/backlog/SKILL.md) | Auto-loaded by the backlog skill trigger; also when driving `backlog` manually |
 
-> **Skills location.** Canonical: `.agents/skills/<name>/` (agent-agnostic). `.claude/skills/` are symlinks created by `scripts/skills-bootstrap.sh` so Claude Code can auto-trigger them. To refresh skills: re-run `scripts/skills-bootstrap.sh`. To add/remove skills: edit `.agents/skillfile`, then re-run.
+> **Skills location.** Canonical: `.agents/skills/<name>/` (agent-agnostic, **vendored/committed**). `.claude/skills/` are symlinks created by `scripts/skills-bootstrap.sh` so Claude Code can auto-trigger them. Skills are not fetched from anywhere — to refresh the symlinks (e.g. after adding a skill), re-run `scripts/skills-bootstrap.sh`.
 
 ## Load-on-demand rule
 
@@ -39,30 +36,30 @@ Don't read every wiki file at session start. Pick the file matching the task —
 
 ## Session handoff
 
-When ending a session mid-issue, drop a one-line comment on the active issue describing what's done, what's next, and any blocker:
+When ending a session mid-task, record what's done, what's next, and any blocker on the active task:
 
 ```sh
-rad issue comment <hex7> -m "Session pause $(date -I). Done: <X>. Next: <Y>. Blocker: <Z|none>."
+backlog task edit <id> --notes "Session pause $(date -I). Done: <X>. Next: <Y>. Blocker: <Z|none>."
 ```
 
-When starting a session, read recent comments on the most-recently-touched in-progress issue (`rad issue list --label state:in-progress`, then `rad issue show <hex7>`) before doing anything else. Forge-visible, agent-agnostic.
+When starting a session, read the most-recently-touched in-progress task (`backlog task list -s "In Progress" --plain`, then `backlog task <id> --plain`) before doing anything else. Local, versioned in-repo, agent-agnostic.
 
-Details: [`wiki/agents/working-on-issues.md`](wiki/agents/working-on-issues.md).
+Details: [`backlog/docs/working-on-tasks.md`](backlog/docs/working-on-tasks.md).
 
-## Working on issues / patches
+## Working on tasks
 
-This repo uses **Radicle** as its canonical forge (any GitHub/GitLab mirror is CI-only). Read [`.agents/skills/radicle/SKILL.md`](.agents/skills/radicle/SKILL.md) before driving `rad`. Issues follow [`.agents/skills/radboard/SKILL.md`](.agents/skills/radboard/SKILL.md) label conventions (`state:*`, `priority:*`, `milestone:*`, `epic`, `parent:<hex7>`, `blocked:*`).
+This repo tracks work **locally** with [Backlog.md](https://github.com/MrLesk/Backlog.md) — tasks are markdown under `backlog/`, no external tracker. Read [`.agents/skills/backlog/SKILL.md`](.agents/skills/backlog/SKILL.md) (and run `backlog instructions overview`) before driving `backlog`. It's **forge-agnostic**: git is plain branches merged into the default branch; a remote (GitHub/GitLab/Codeberg/Radicle/none) is an optional mirror, not an issue tracker.
 
 ## Quick dev loop
 
-<TBD: stack-specific commands — filled at bootstrap. Full list in `wiki/agents/commands.md`.>
+<TBD: stack-specific commands — filled at bootstrap. Full list in `backlog/docs/commands.md`.>
 
 ## Hard rules (don't violate)
 
 - **Never commit without explicit user request.** Even mid-task, after accepting a plan, stop and ask. Acceptance of plan ≠ acceptance of commit.
 - **Don't add features, refactor, or introduce abstractions beyond what the task requires.** Bug fix = bug fix, not surrounding cleanup.
-- **Don't pre-empt later milestones.** If something is tagged `milestone:m5`, don't half-implement it during M2 work.
-- **All project docs live under `wiki/`.** If you find a `docs/` folder, move its contents to `wiki/` and delete the old folder.
+- **Don't pre-empt later milestones.** If a task is scoped to a later milestone (Backlog.md label/milestone), don't half-implement it during earlier work.
+- **All project docs live under `backlog/docs/`.** That's the single knowledge tree (tasks, docs, and decisions all live under `backlog/`).
 
 ## Code ownership
 

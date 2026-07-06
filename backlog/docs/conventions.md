@@ -27,8 +27,8 @@ Generic conventions that apply regardless of stack. Stack-specific rules (langua
 
 ## Phase / scope discipline
 
-- Don't pre-empt later milestones. If something is tagged `milestone:m5`, don't half-implement it during M2 work.
-- If a refactor would be cleaner alongside a bug fix but isn't required, defer it — open a Radicle issue instead.
+- Don't pre-empt later milestones. If a task is scoped to a later milestone, don't half-implement it during earlier work.
+- If a refactor would be cleaner alongside a bug fix but isn't required, defer it — create a backlog task instead.
 - Don't add error handling, fallbacks, or validation for scenarios that can't happen at the call site. Trust internal code; validate only at system boundaries (user input, external APIs).
 
 ## UI / output text (if applicable)
@@ -37,8 +37,8 @@ Generic conventions that apply regardless of stack. Stack-specific rules (langua
 
 ## When in doubt
 
-- Read the relevant ADR in [`../adr/`](../adr/).
-- Check Radicle issues for active work: `rad issue list --all`.
+- Read the relevant decision: `backlog decision list` (see [`decisions.md`](decisions.md)).
+- Check active work: `backlog task list --plain`.
 - Ask the user. Solo project — they're the only deciding authority.
 
 ---
@@ -54,4 +54,4 @@ Generic conventions that apply regardless of stack. Stack-specific rules (langua
 - **Plugin/extension model**: if the project has one
 - **Test strategy**: contract, integration, E2E split + tools
 
-Keep each subsection short. Link out to ADRs for anything that needed a real decision.>
+Keep each subsection short. Link out to `backlog decision`s for anything that needed a real decision.>

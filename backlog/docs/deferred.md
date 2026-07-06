@@ -9,7 +9,7 @@ Things **deliberately not implemented**. If something seems missing and is liste
 
 - **Why deferred:** <one paragraph>
 - **Revisit when:** <trigger condition>
-- **Tracked in:** <radicle issue hex7, if any>
+- **Tracked in:** <task-N, if any>
 ```
 
 ## Entries

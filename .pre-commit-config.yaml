@@ -27,7 +27,7 @@ repos:
         language: system
         entry: markdownlint
         files: '\.md$'
-        exclude: '(^\.agents/skills/|^\.claude/skills/|^LICENSE)'
+        exclude: '(^\.claude/skills/|^LICENSE)'
         stages: [manual]
 
       - id: shellcheck

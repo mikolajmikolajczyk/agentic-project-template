@@ -2,6 +2,10 @@
 
 Toolchain and local-environment setup. Stack-specific toolchain pinning (Nix flake, mise, asdf, rustup, nvm, uv, ...) is added at bootstrap.
 
+The repo ships a `flake.nix` whose devShell always includes **`backlog`** (the Backlog.md CLI),
+`pre-commit`, and `git`; stack packages are appended at bootstrap. Enter it with `nix develop`, or
+let direnv auto-load it (`.envrc` is already `use flake`).
+
 ## direnv (optional but recommended)
 
 `.envrc` ships in the repo. Allow it once per clone:

@@ -4,31 +4,37 @@
 
 ## What this template is
 
-A project-management scaffold for solo, AI-assisted projects using **Radicle** as canonical forge + **radboard** label conventions for kanban + a `wiki/` knowledge tree designed for load-on-demand by coding agents. The template is **technology-agnostic** — you bring your own stack.
+A **local-first**, project-management scaffold for solo, AI-assisted projects using
+**[Backlog.md](https://github.com/MrLesk/Backlog.md)** as the task tracker (tasks, docs, and
+decisions as committed markdown under `backlog/`) + a load-on-demand knowledge tree for coding
+agents. Forge-agnostic — any git remote is an optional mirror. The template is
+**technology-agnostic** — you bring your own stack.
 
 What you get out of the box:
 
-- `AGENTS.md` / `CLAUDE.md` pointer table — tells agents which wiki file to load for which task
-- `wiki/agents/*` — coding conventions, dev setup, commands, architecture, status, deferred, glossary
-- `wiki/adr/` + `wiki/decisions/` — three-way decision capture (ADR vs decision log vs issue comment)
-- `.agents/skillfile` + `scripts/skills-bootstrap.sh` — fetches `radicle` + `radboard` skills from [llm_skills](https://github.com/mikolajmikolajczyk/llm_skills) into `.agents/skills/` and symlinks them under `.claude/skills/` for Claude Code auto-trigger
-- `.claude/hooks/session-start.sh` — prints branch + last 5 commits + in-progress issues + milestone snapshot at every session start
+- `AGENTS.md` / `CLAUDE.md` pointer table — tells agents which `backlog/docs/` file to load for which task
+- `backlog/docs/*` — coding conventions, dev setup, commands, architecture, status, deferred, glossary, working-on-tasks
+- `backlog/decisions/` + `backlog/docs/decisions.md` — two-way decision capture (`backlog decision` vs task note)
+- `backlog/config.yml` — Backlog.md config (statuses `To Do`/`In Progress`/`Done`, task prefix, definition-of-done)
+- `.agents/skills/backlog/` + `scripts/skills-bootstrap.sh` — the **vendored** `backlog` skill (committed, no fetch), symlinked under `.claude/skills/` for Claude Code auto-trigger
+- `flake.nix` + `.envrc` — reproducible devShell that always ships `backlog`, `pre-commit`, `git`
+- `.claude/hooks/session-start.sh` — prints branch + last 5 commits + in-progress tasks + board snapshot at every session start
 - `.pre-commit-config.yaml` — generic hooks (whitespace, yaml/json checks, markdownlint, shellcheck, gitleaks, GPG UID guard)
 - `scripts/uid-guard.sh` — GPG signing-key UID safety check
 
 ## Procedure
 
-### Step 0 — Install skills
+### Step 0 — Link skills
 
-Skills are not vendored — they're fetched from [llm_skills](https://github.com/mikolajmikolajczyk/llm_skills) at bootstrap so they're always fresh.
+Skills are **vendored** (committed under `.agents/skills/`). This step only symlinks them into
+`.claude/skills/` so Claude Code can auto-trigger them — no network.
 
 ```sh
 ./scripts/skills-bootstrap.sh
 ```
 
-This reads `.agents/skillfile`, clones llm_skills into a tempdir, runs `llm_skills.sh sync .` (installs into `.agents/skills/` as symlinks to the user's `~/.local/share/llm_skills/repos/` cache), and symlinks them under `.claude/skills/` for Claude Code auto-discovery.
-
-Verify: `ls .agents/skills/` should show `radicle/` and `radboard/`, both with `SKILL.md` inside.
+Verify: `ls .agents/skills/backlog/SKILL.md` exists, and `ls -l .claude/skills/backlog` shows a
+symlink into it.
 
 ### Step 1 — Ask the user these questions (one batch)
 
@@ -37,12 +43,12 @@ Present all questions at once. Wait for answers before filling anything.
 1. **Project name** (short, kebab-case ok) and **one-sentence description**.
 2. **Primary stack / language** (Node+TS, Rust, Python, Go, Elixir, mixed, undecided, ...). Used to seed `.gitignore`, `dev-setup.md`, `commands.md`.
 3. **License**: AGPL-3.0-or-later, MIT, Apache-2.0, proprietary, or "decide later".
-4. **Forge model**: Radicle-only, Radicle + mirror (GitHub/GitLab/Codeberg), or other. (Default: Radicle-only.)
-5. **First milestone label name + goal** (e.g. `milestone:m0-foundation` → "scaffold + first runnable thing"). Seeds the first Radicle issue.
-6. **Any pre-existing architectural decisions?** (e.g. "monorepo with pnpm workspaces", "single binary", "no DB"). Each becomes an ADR (`wiki/adr/0001-*.md`, `0002-*.md`, ...).
+4. **Git remote (optional)**: GitHub, GitLab, Codeberg, Radicle, or none. Tasks are local either way — the remote is just a mirror. (Default: none.)
+5. **First task title + goal** (e.g. "scaffold + first runnable thing"). Seeds the first Backlog.md task in `To Do`.
+6. **Any pre-existing architectural decisions?** (e.g. "monorepo with pnpm workspaces", "single binary", "no DB"). Each becomes a `backlog decision` (`backlog/decisions/decision-1 - *.md`, ...).
 7. **Commit convention**: Conventional Commits (default), gitmoji, custom, or none.
 8. **Pre-commit language hooks now or later?** If now: which (eslint, ruff, cargo fmt, ...). If later: leave `.pre-commit-config.yaml` generic-only.
-9. **Toolchain pinning via Nix flake + direnv?** (**recommended** — reproducible devShell, no global installs, auto-activates on `cd`). If yes: scaffold `flake.nix` for the stack from Q2 and switch `.envrc` to `use flake`. If no: leave `.envrc` empty and note alternative (mise / asdf / rustup / nvm / system) in `dev-setup.md`.
+9. **Extra stack packages in the Nix devShell?** The repo already ships a `flake.nix` whose devShell includes `backlog`, `pre-commit`, and `git`, and `.envrc` is already `use flake`. If yes: add the stack toolchain (Q2) to the marked `# stack packages` block in `flake.nix`. (Prefer not to use Nix at all? You can, but the `backlog` CLI then needs installing another way — see `backlog/docs/dev-setup.md`.)
 10. **Maintainer name** for `AGENTS.md` "Code ownership" section.
 
 ### Step 2 — Fill placeholders
@@ -51,21 +57,22 @@ Search the repo for `<TBD` and `<PROJECT_NAME>`. Replace using the answers. File
 
 - `AGENTS.md` — project name, description, dev loop snippet, code ownership
 - `CLAUDE.md` — project name
-- `README.md` — **overwrite entirely** (current contents describe the template itself; replace with project README: title from Q1, one-line description, minimal "Getting started" for the chosen stack from Q2, license section from Q3). Don't keep the template's "Contributing via Radicle / RID rad:zVjxxNV4b1xBphQA78dNtTLQKtic" section — that's about the template repo, not your project. Your project gets its own RID after `rad init` in Step 5.
-- `wiki/index.md` — title
-- `wiki/agents/index.md` — title
-- `wiki/user/index.md` — title
-- `wiki/agents/conventions.md` — append "Stack-specific" section from answers (Q2)
-- `wiki/agents/commands.md` — fill with build/test/run commands for the chosen stack (Q2)
-- `wiki/agents/dev-setup.md` — toolchain section from Q2; if Q9=yes, add an explicit "This project uses Nix flake + direnv" line at the top of "Stack-specific toolchain" so agents know to run `nix develop` / trust direnv auto-activation
-- `flake.nix` — create only if Q9=yes; minimal `devShell` with packages for the chosen stack (Q2)
-- `.envrc` — if Q9=yes, set contents to `use flake`
-- `wiki/agents/architecture.md` — minimal seed; user fleshes out later
+- `backlog/config.yml` — set `project_name` from Q1 (`backlog config set project_name "<name>"` or edit the file)
+- `README.md` — **overwrite entirely** (current contents describe the template itself; replace with project README: title from Q1, one-line description, minimal "Getting started" for the chosen stack from Q2, license section from Q3). Drop the template's "Contributing" section — that's about the template repo, not your project.
+- `backlog/docs/readme.md` — title / intro
+- `backlog/docs/user/index.md` — title
+- `backlog/docs/conventions.md` — append "Stack-specific" section from answers (Q2)
+- `backlog/docs/commands.md` — fill with build/test/run commands for the chosen stack (Q2)
+- `backlog/docs/dev-setup.md` — toolchain section from Q2; note the flake already ships `backlog`
+- `flake.nix` — add the Q2 stack packages to the marked `# stack packages` block
+- `backlog/docs/architecture.md` — minimal seed; user fleshes out later
 - `.gitignore` — append stack-specific ignores (Q2): `node_modules/ dist/` or `target/` or `__pycache__/ .venv/` etc.
 
-### Step 3 — Seed ADRs from pre-existing decisions
+### Step 3 — Record pre-existing decisions
 
-For each item in Q6, write `wiki/adr/0001-*.md`, `0002-*.md`, ... using the format described in `wiki/adr/README.md`. Number sequentially. If user picked AGPL/MIT/etc. in Q3, write a license ADR too.
+For each item in Q6, run `backlog decision create "<summary>"` and fill the generated
+`backlog/decisions/decision-N - *.md` using the format described in `backlog/docs/decisions.md`. If
+the user picked AGPL/MIT/etc. in Q3, record a license decision too.
 
 ### Step 4 — Replace LICENSE file
 
@@ -77,17 +84,18 @@ rm LICENSE
 
 Then, based on Q3, drop the canonical license text into a fresh `LICENSE`. Skip the recreate step if user picked "decide later" — leave the file deleted.
 
-### Step 5 — Set up Radicle (only if user confirms)
+### Step 5 — Initialize Backlog.md state
+
+The `backlog/` scaffold (config, folders) already ships committed — no interactive `backlog init`
+needed. Set the project name and create the first task from Q5:
 
 ```sh
-rad init --name <project-name> --description "<one-liner>" --default-branch main --private  # or --public
+backlog config set project_name "<project-name>"      # or edit backlog/config.yml
+backlog task create "<goal from Q5>" --priority high
 ```
 
-Then create the first issue from Q5:
-
-```sh
-rad issue open --title "<goal from Q5>" --label "<milestone label from Q5>" --label "priority:high"
-```
+(Optional, only if the user wants a remote from Q4: `git remote add origin <url>` — tasks stay
+local regardless.)
 
 ### Step 6 — (Optional) language-specific pre-commit hooks
 
@@ -112,10 +120,10 @@ Suggested defaults per stack: Node+TS → prettier, eslint, tsc --noEmit, knip, 
 chore: bootstrap from agentic-project-template
 
 - pointer-table AGENTS.md / CLAUDE.md
-- radicle + radboard skills wired
-- wiki/ knowledge tree (agents/, adr/, decisions/, skills/, user/)
+- Backlog.md task tracker + vendored backlog skill
+- backlog/ knowledge tree (docs/, decisions/)
 - generic pre-commit hooks + GPG UID guard
-- ADR-0001..N seeded from bootstrap answers
+- decision-1..N recorded from bootstrap answers
 ```
 
 ### Step 8 — Self-delete
