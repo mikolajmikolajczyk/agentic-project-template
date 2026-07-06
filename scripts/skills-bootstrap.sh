@@ -14,6 +14,17 @@ if [[ ! -d .agents/skills ]]; then
 fi
 
 mkdir -p .claude/skills
+
+# Prune stale links: remove any .claude/skills/<name> whose vendored source is gone.
+for link in .claude/skills/*; do
+  [[ -L "$link" ]] || continue
+  name=$(basename "$link")
+  if [[ ! -d ".agents/skills/$name" ]]; then
+    rm -f "$link"
+    echo "• pruned stale .claude/skills/$name"
+  fi
+done
+
 for skill_dir in .agents/skills/*/; do
   [[ -d "$skill_dir" ]] || continue
   name=$(basename "$skill_dir")

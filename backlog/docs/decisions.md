@@ -16,7 +16,7 @@ to find).
 
 ```sh
 backlog decision create "<one-line decision summary>"   # → backlog/decisions/decision-N - <Title>.md
-backlog decision list
+ls backlog/decisions/                                    # list existing (no `decision list` subcommand)
 ```
 
 Fill the generated file. Suggested sections (keep it short — a durable trace, not a research

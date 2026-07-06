@@ -18,7 +18,7 @@ with:
   into `.claude/skills/` for Claude Code auto-trigger by `scripts/skills-bootstrap.sh`.
 - Generic pre-commit hooks (whitespace, YAML/JSON checks, markdownlint, shellcheck, gitleaks) +
   GPG signing-key UID guard.
-- `.claude/hooks/session-start.sh` — branch + last commits + in-progress tasks + board snapshot at
+- `.claude/hooks/session-start.sh` — branch + last commits + in-progress tasks + to-do snapshot at
   every session start.
 - `flake.nix` + `.envrc` (`use flake`) — reproducible devShell that always includes `backlog`,
   `pre-commit`, and `git`; stack packages are added at bootstrap.

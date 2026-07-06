@@ -1,6 +1,6 @@
 # Architecture
 
-Repo shape, data flow, key modules. Keep this **descriptive of the current state**, not aspirational. For decisions about why the architecture is what it is, see [`decisions.md`](decisions.md) / `backlog decision list`.
+Repo shape, data flow, key modules. Keep this **descriptive of the current state**, not aspirational. For decisions about why the architecture is what it is, see [`decisions.md`](decisions.md) / `ls backlog/decisions/`.
 
 ## Layout
 

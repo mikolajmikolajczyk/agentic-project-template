@@ -29,7 +29,12 @@ fi
 print_section "to-do snapshot"
 if command -v backlog >/dev/null 2>&1; then
   # --plain is the non-interactive view; never launch the TUI board from a hook.
-  backlog task list -s "To Do" --plain 2>/dev/null | head -10
+  out=$(backlog task list -s "To Do" --plain 2>/dev/null | head -10)
+  if [ -n "$out" ]; then
+    echo "$out"
+  else
+    echo "(none — nothing in To Do)"
+  fi
 fi
 
 print_section "load order reminder"

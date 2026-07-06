@@ -18,7 +18,7 @@ What you get out of the box:
 - `backlog/config.yml` — Backlog.md config (statuses `To Do`/`In Progress`/`Done`, task prefix, definition-of-done)
 - `.agents/skills/backlog/` + `scripts/skills-bootstrap.sh` — the **vendored** `backlog` skill (committed, no fetch), symlinked under `.claude/skills/` for Claude Code auto-trigger
 - `flake.nix` + `.envrc` — reproducible devShell that always ships `backlog`, `pre-commit`, `git`
-- `.claude/hooks/session-start.sh` — prints branch + last 5 commits + in-progress tasks + board snapshot at every session start
+- `.claude/hooks/session-start.sh` — prints branch + last 5 commits + in-progress tasks + to-do snapshot at every session start
 - `.pre-commit-config.yaml` — generic hooks (whitespace, yaml/json checks, markdownlint, shellcheck, gitleaks, GPG UID guard)
 - `scripts/uid-guard.sh` — GPG signing-key UID safety check
 
@@ -57,7 +57,7 @@ Search the repo for `<TBD` and `<PROJECT_NAME>`. Replace using the answers. File
 
 - `AGENTS.md` — project name, description, dev loop snippet, code ownership
 - `CLAUDE.md` — project name
-- `backlog/config.yml` — set `project_name` from Q1 (`backlog config set project_name "<name>"` or edit the file)
+- `backlog/config.yml` — set `project_name` from Q1 (edit the file directly; `backlog config` opens the interactive flow)
 - `README.md` — **overwrite entirely** (current contents describe the template itself; replace with project README: title from Q1, one-line description, minimal "Getting started" for the chosen stack from Q2, license section from Q3). Drop the template's "Contributing" section — that's about the template repo, not your project.
 - `backlog/docs/readme.md` — title / intro
 - `backlog/docs/user/index.md` — title

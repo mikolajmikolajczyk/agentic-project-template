@@ -23,7 +23,7 @@ If `BOOTSTRAP.md` still exists in repo root, this project hasn't been bootstrapp
 | Common dev commands (build, test, run, typecheck, lint) | [`backlog/docs/commands.md`](backlog/docs/commands.md) | When running build/test/dev loops |
 | Tooling (devShell, direnv, pre-commit, static analysis) | [`backlog/docs/dev-setup.md`](backlog/docs/dev-setup.md) | When fixing tooling, adding hooks, or onboarding |
 | Working on tasks (statuses, branch naming, session handoff) | [`backlog/docs/working-on-tasks.md`](backlog/docs/working-on-tasks.md) | Before picking up a task |
-| Where to capture decisions (`backlog decision` vs task note) | [`backlog/docs/decisions.md`](backlog/docs/decisions.md) + `backlog decision list` | When making a non-trivial decision |
+| Where to capture decisions (`backlog decision` vs task note) | [`backlog/docs/decisions.md`](backlog/docs/decisions.md) + `ls backlog/decisions/` | When making a non-trivial decision |
 | Project glossary / domain terminology | [`backlog/docs/glossary.md`](backlog/docs/glossary.md) | When you hit an unfamiliar term |
 | Things deliberately deferred — do NOT implement unprompted | [`backlog/docs/deferred.md`](backlog/docs/deferred.md) | Before adding features that "seem missing" |
 | Backlog skill (`backlog` CLI + task/doc/decision workflow) | [`.agents/skills/backlog/SKILL.md`](.agents/skills/backlog/SKILL.md) | Auto-loaded by the backlog skill trigger; also when driving `backlog` manually |
@@ -32,7 +32,7 @@ If `BOOTSTRAP.md` still exists in repo root, this project hasn't been bootstrapp
 
 ## Load-on-demand rule
 
-Don't read every wiki file at session start. Pick the file matching the task — they are sized to be loaded individually. The table above tells you *when* to load *what*.
+Don't read every `backlog/docs/` file at session start. Pick the file matching the task — they are sized to be loaded individually. The table above tells you *when* to load *what*.
 
 ## Session handoff
 

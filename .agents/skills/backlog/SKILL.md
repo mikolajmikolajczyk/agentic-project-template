@@ -21,7 +21,7 @@ and forge-agnostic. The CLI is `backlog`.
 
 ## Layout
 
-```
+```text
 backlog/
   config.yml            # project_name, statuses, task_prefix, definition_of_done, …
   tasks/                # task-N - Title.md (the board)
@@ -58,9 +58,9 @@ backlog task <id> --plain
 ## Create / edit flags (cheat-sheet — confirm with `--help`)
 
 `create` and `edit` share most flags: `-d/--description`, `--ac <criterion>` (repeatable),
-`-l/--labels`, `--priority`, `-s/--status`, `-a/--assignee`, `--plan`, `--notes`, `--parent`,
-`--depends-on`, `--draft`, `--dod`. `edit` adds `--check-ac <n>` / `--uncheck-ac <n>` and
-`--comment`.
+`-l/--labels`, `--priority`, `-s/--status`, `-a/--assignee`, `--plan`, `--notes`,
+`-p <parent-id>` (parent), `--dep <ids>` (dependencies), `--draft`, `--dod`. `edit` adds
+`--check-ac <n>` / `--uncheck-ac <n>` and `--comment`.
 
 ## Board & browser
 
@@ -76,7 +76,7 @@ backlog browser [--port N]    # web UI
 backlog doc create "<title>" [-p <subpath>]   # project documentation → backlog/docs/
 backlog doc list
 backlog decision create "<title>"             # architecture/tech decision → backlog/decisions/
-backlog decision list
+ls backlog/decisions/                          # list existing (no `decision list` subcommand)
 ```
 
 Decision vs task note: cross-cutting / architecture-grade → `backlog decision`; bound to one task →

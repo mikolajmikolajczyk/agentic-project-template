@@ -37,7 +37,7 @@ Generic conventions that apply regardless of stack. Stack-specific rules (langua
 
 ## When in doubt
 
-- Read the relevant decision: `backlog decision list` (see [`decisions.md`](decisions.md)).
+- Read the relevant decision: `ls backlog/decisions/` (see [`decisions.md`](decisions.md)).
 - Check active work: `backlog task list --plain`.
 - Ask the user. Solo project — they're the only deciding authority.
 
